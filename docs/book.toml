@@ -1,0 +1,10 @@
+[book]
+authors = ["shinoda4"]
+language = "en"
+multilingual = false
+src = "src"
+title = "SD-SVC-GATEWAY Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/shinoda4/sd-svc-gateway"
+edit-url-template = "https://github.com/shinoda4/sd-svc-gateway/edit/master/docs/src/{path}"
