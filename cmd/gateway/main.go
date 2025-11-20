@@ -1,23 +1,40 @@
 package main
 
 import (
+	"context"
 	"log"
 
+	authpb "github.com/shinoda4/sd-grpc-proto/proto/auth/v1"
 	"github.com/shinoda4/sd-svc-gateway/internal/config"
 	"github.com/shinoda4/sd-svc-gateway/internal/router"
-	grpc_transport "github.com/shinoda4/sd-svc-gateway/internal/transport/grpc"
-	http_transport "github.com/shinoda4/sd-svc-gateway/internal/transport/http"
+	grpctransport "github.com/shinoda4/sd-svc-gateway/internal/transport/grpc"
+	httptransport "github.com/shinoda4/sd-svc-gateway/internal/transport/http"
+	"google.golang.org/grpc"
 )
 
 func main() {
 	cfg := config.Load()
 
 	// Initialize Auth gRPC client
-	authClient, authConn := grpc_transport.NewAuthClient(cfg.AuthSvcURL)
-	defer authConn.Close()
+	authClient, authConn := grpctransport.NewAuthClient(cfg.AuthSvcURL)
+	defer func(authConn *grpc.ClientConn) {
+		err := authConn.Close()
+		if err != nil {
+			return
+		}
+	}(authConn)
+
+	healthCheckResponse, err := authClient.HealthCheck(context.Background(), &authpb.HealthCheckRequest{
+		Message: "hello",
+	})
+	if err != nil {
+		return
+	}
+
+	log.Printf("health check response: %v", healthCheckResponse)
 
 	// Initialize Auth HTTP handler
-	authH := http_transport.NewAuthHandler(authClient)
+	authH := httptransport.NewAuthHandler(authClient)
 
 	r := router.Setup(cfg, authH)
 

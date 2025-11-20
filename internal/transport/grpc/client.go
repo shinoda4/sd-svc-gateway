@@ -3,7 +3,7 @@ package grpc
 import (
 	"log"
 
-	authv1 "github.com/shinoda4/sd-grpc-proto/auth/v1"
+	authv1 "github.com/shinoda4/sd-grpc-proto/proto/auth/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

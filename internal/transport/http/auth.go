@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	authv1 "github.com/shinoda4/sd-grpc-proto/auth/v1"
+	authv1 "github.com/shinoda4/sd-grpc-proto/proto/auth/v1"
 	"google.golang.org/grpc/metadata"
 )
 
